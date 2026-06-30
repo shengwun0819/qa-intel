@@ -1,0 +1,975 @@
+<title>qa-intel · First-Time User Scenarios</title>
+<meta name="description" content="All scenarios a first-time qa-intel user will encounter — setup, gen-test-cases, risk-analyzer, and repo-scout.">
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #0B0F15;
+    --surf:      #111820;
+    --surf-hi:   #18222E;
+    --border:    #1D2840;
+    --border-lo: #131B28;
+    --text:      #C8D8EC;
+    --text-2:    #7090B8;
+    --text-3:    #3A5070;
+    --code-bg:   #0D1520;
+    --code-text: #7EC8F0;
+
+    --gen:    #4899E8;
+    --gen-bg: rgba(72, 153, 232, 0.08);
+    --risk:   #E87048;
+    --risk-bg: rgba(232, 112, 72, 0.08);
+    --scout:  #38C878;
+    --scout-bg: rgba(56, 200, 120, 0.08);
+    --setup:  #A880F0;
+    --setup-bg: rgba(168, 128, 240, 0.08);
+
+    --r: 6px;
+    --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+    --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  }
+
+  html { font-size: 15px; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    padding: 48px 24px 96px;
+  }
+
+  .page { max-width: 920px; margin: 0 auto; }
+
+  /* ── Header ── */
+  .header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 28px;
+    margin-bottom: 48px;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .logo {
+    font-family: var(--font-mono);
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+  .logo span { color: var(--gen); }
+  .tagline {
+    font-size: 0.8rem;
+    color: var(--text-2);
+    margin-top: 4px;
+  }
+  .skill-legend {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--text-2);
+  }
+  .legend-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── Section header ── */
+  .section { margin-bottom: 56px; }
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text);
+    text-wrap: balance;
+  }
+  .section-sub {
+    font-size: 0.8rem;
+    color: var(--text-2);
+    margin-top: 2px;
+    margin-bottom: 20px;
+    max-width: 600px;
+  }
+  .skill-pill {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    padding: 3px 8px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+  .pill-gen   { background: var(--gen-bg);   color: var(--gen);   border: 1px solid rgba(72,153,232,0.2); }
+  .pill-risk  { background: var(--risk-bg);  color: var(--risk);  border: 1px solid rgba(232,112,72,0.2); }
+  .pill-scout { background: var(--scout-bg); color: var(--scout); border: 1px solid rgba(56,200,120,0.2); }
+  .pill-setup { background: var(--setup-bg); color: var(--setup); border: 1px solid rgba(168,128,240,0.2); }
+
+  /* ── Setup flow ── */
+  .setup-flow {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1px;
+    background: var(--border-lo);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    overflow: hidden;
+  }
+  .setup-step {
+    background: var(--surf);
+    padding: 20px;
+    position: relative;
+  }
+  .step-num {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--setup);
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+    display: block;
+  }
+  .step-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+    text-wrap: balance;
+  }
+  .step-body {
+    font-size: 0.78rem;
+    color: var(--text-2);
+    line-height: 1.5;
+  }
+  .step-cmd {
+    margin-top: 8px;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    background: var(--code-bg);
+    color: var(--code-text);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 6px 8px;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  .optional-badge {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    color: var(--text-3);
+    border: 1px solid var(--border);
+    padding: 1px 5px;
+    border-radius: 2px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  /* ── Scenario grid ── */
+  .scenario-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 12px;
+  }
+
+  /* ── Scenario card ── */
+  .card {
+    background: var(--surf);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .card-bar {
+    height: 3px;
+    flex-shrink: 0;
+  }
+  .card--gen   .card-bar { background: var(--gen);   }
+  .card--risk  .card-bar { background: var(--risk);  }
+  .card--scout .card-bar { background: var(--scout); }
+
+  .card-head {
+    padding: 14px 16px 10px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .card-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.35;
+    text-wrap: balance;
+  }
+
+  .card-body { padding: 0 16px 16px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+
+  .row-label {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    color: var(--text-3);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .have-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  .chip {
+    font-size: 0.72rem;
+    padding: 2px 8px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+    color: var(--text-2);
+    background: var(--surf-hi);
+    white-space: nowrap;
+  }
+  .chip-req { color: var(--text); border-color: rgba(200,216,236,0.12); }
+
+  code.cmd {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.73rem;
+    background: var(--code-bg);
+    color: var(--code-text);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 7px 10px;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  .get-text {
+    font-size: 0.78rem;
+    color: var(--text-2);
+    line-height: 1.5;
+  }
+  .get-text strong { color: var(--text); font-weight: 500; }
+
+  .note {
+    font-size: 0.73rem;
+    color: var(--text-3);
+    padding: 6px 10px;
+    border: 1px solid var(--border-lo);
+    border-radius: 3px;
+    background: var(--bg);
+    line-height: 1.45;
+  }
+  .note::before { content: "↳ "; color: var(--text-3); }
+
+  /* ── Phase block ── */
+  .phase-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 0;
+  }
+  .phase-card {
+    background: var(--surf);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 16px;
+  }
+  .phase-name {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+  }
+  .phase-dev  .phase-name { color: #F0A040; }
+  .phase-ver  .phase-name { color: var(--gen); }
+  .phase-audience {
+    font-size: 0.72rem;
+    color: var(--text-2);
+    margin-bottom: 8px;
+  }
+  .phase-items { list-style: none; display: flex; flex-direction: column; gap: 3px; }
+  .phase-items li {
+    font-size: 0.75rem;
+    color: var(--text-2);
+    padding-left: 14px;
+    position: relative;
+    line-height: 1.4;
+  }
+  .phase-items li::before { content: "·"; position: absolute; left: 4px; color: var(--text-3); }
+  .phase-items li.check { color: var(--text); }
+  .phase-items li.check::before { content: "✓"; color: var(--scout); font-size: 0.6rem; top: 1px; }
+  .phase-items li.skip::before { content: "–"; color: var(--text-3); }
+
+  /* ── Divider ── */
+  .divider {
+    height: 1px;
+    background: var(--border-lo);
+    margin: 40px 0;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    margin-top: 56px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-lo);
+    font-size: 0.75rem;
+    color: var(--text-3);
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .footer code { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-2); }
+
+  @media (max-width: 600px) {
+    .scenario-grid { grid-template-columns: 1fr; }
+    .phase-grid    { grid-template-columns: 1fr; }
+    .setup-flow    { grid-template-columns: 1fr; }
+  }
+</style>
+
+<div class="page">
+
+  <!-- Header -->
+  <header class="header">
+    <div>
+      <div class="logo">qa<span>-intel</span></div>
+      <div class="tagline">First-Time User Scenarios · Complete Reference</div>
+    </div>
+    <div class="skill-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--setup)"></div> Setup</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--gen)"></div> gen-test-cases</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--risk)"></div> risk-analyzer</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--scout)"></div> repo-scout</div>
+    </div>
+  </header>
+
+  <!-- ── 1. SETUP ── -->
+  <section class="section">
+    <div class="section-header">
+      <span class="skill-pill pill-setup">SETUP</span>
+      <h2 class="section-title">第一次使用：從安裝到第一個指令</h2>
+    </div>
+    <p class="section-sub">所有 skill 在沒有專案配置的情況下仍可運作（通用模式）。Step 2–3 是讓工具更貼合你公司的設定，非必要。</p>
+
+    <div class="setup-flow">
+      <div class="setup-step">
+        <span class="step-num">STEP 01</span>
+        <div class="step-title">安裝 plugin</div>
+        <div class="step-body">將 qa-intel clone 至 Claude Code plugin 目錄。</div>
+        <div class="step-cmd">claude plugin install &lt;repo-url&gt;</div>
+      </div>
+      <div class="setup-step">
+        <span class="step-num">STEP 02 <span class="optional-badge">選用</span></span>
+        <div class="step-title">建立專案配置</div>
+        <div class="step-body">複製 TestProject 為你公司的配置目錄。</div>
+        <div class="step-cmd">cp -r projects/TestProject projects/MyCompany</div>
+      </div>
+      <div class="setup-step">
+        <span class="step-num">STEP 03 <span class="optional-badge">選用</span></span>
+        <div class="step-title">填入 project.md</div>
+        <div class="step-body">設定 Scrum Tool、Bug 紀錄位置、裝置/範圍預設、自訂模板。不填則通用模式繼續。</div>
+      </div>
+      <div class="setup-step">
+        <span class="step-num">STEP 04 <span class="optional-badge">選用</span></span>
+        <div class="step-title">建立知識庫</div>
+        <div class="step-body">掃描 repo，讓 risk-analyzer 與 gen-test-cases 有 codebase 背景知識。</div>
+        <div class="step-cmd">/repo-scout</div>
+      </div>
+      <div class="setup-step" style="background:var(--surf-hi)">
+        <span class="step-num" style="color:var(--scout)">READY</span>
+        <div class="step-title">開始使用</div>
+        <div class="step-body">執行任意 skill。Phase 0 會自動偵測並載入你的專案配置。</div>
+        <div class="step-cmd">/gen-test-cases</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ── 2. GEN-TEST-CASES ── -->
+  <section class="section">
+    <div class="section-header">
+      <span class="skill-pill pill-gen">GEN-TEST-CASES</span>
+      <h2 class="section-title">產出手動測試案例</h2>
+    </div>
+    <p class="section-sub">依你提供的輸入組合，skill 會自動調整分析深度。任何組合都能運作；輸入越多，案例越精準。</p>
+
+    <div class="scenario-grid">
+
+      <div class="card card--gen">
+        <div class="card-bar"></div>
+        <div class="card-head">
+          <div class="card-title">最簡情境：只有 Task ID</div>
+          <span class="skill-pill pill-gen">GEN</span>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="row-label">你有</div>
+            <div class="have-chips">
+              <span class="chip chip-req">ClickUp / Jira Task ID</span>
+            </div>
+          </div>
+          <div>
+            <div class="row-label">指令</div>
+            <code class="cmd">/gen-test-cases</code>
+          </div>
+          <div class="get-text">
+            讀取 Task 的 title、description、AC、留言。若有知識庫則自動補充 codebase 背景。輸出完整測試案例並寫入 Scrum Tool。
+          </div>
+          <div class="note">無 project.md 時以通用模式執行，裝置/範圍會在執行中詢問。</div>
+        </div>
+      </div>
+
+      <div class="card card--gen">
+        <div class="card-bar"></div>
+        <div class="card-head">
+          <div class="card-title">Task + 本機原始碼</div>
+          <span class="skill-pill pill-gen">GEN</span>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="row-label">你有</div>
+            <div class="have-chips">
+              <span class="chip chip-req">Task ID</span>
+              <span class="chip">Local source code path</span>
+            </div>
+          </div>
+          <div>
+            <div class="row-label">指令</div>
+            <code class="cmd">/gen-test-cases → 補充 local path + keywords</code>
+          </div>
+          <div class="get-text">
+            除 AC 外，還會根據關鍵字定向讀取原始碼，補充票卡未明確說明的系統行為與邊界條件。
+          </div>
+        </div>
+      </div>
+
+      <div class="card card--gen">
+        <div class="card-bar"></div>
+        <div class="card-head">
+          <div class="card-title">Task + PR URL</div>
+          <span class="skill-pill pill-gen">GEN</span>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="row-label">你有</div>
+            <div class="have-chips">
+              <span class="chip chip-req">Task ID</span>
+              <span class="chip">GitHub PR URL</span>
+            </div>
+          </div>
+          <div>
+            <div class="row-label">指令</div>
+            <code class="cmd">/gen-test-cases → 補充 PR URL</code>
+          </div>
+          <div class="get-text">
+            讀取 PR diff，精確定位本次改動的檔案與模組。測試案例聚焦於 <strong>實際有變更的範圍</strong>，減少不必要的案例。
+          </div>
+          <div class="note">Private repo 需同時提供 local repo path，改用 gh pr diff 讀取。</div>
+        </div>
+      </div>
+
+      <div class="card card--gen">
+        <div class="card-bar"></div>
+        <div class="card-head">
+          <div class="card-title">Task + ai-plans</div>
+          <span class="skill-pill pill-gen">GEN</span>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="row-label">你有</div>
+            <div class="have-chips">
+              <span class="chip chip-req">Task ID</span>
+              <span class="chip">branch URL 或 local ai-plans path</span>
+            </div>
+          </div>
+          <div>
+            <div class="row-label">指令</div>
+            <code class="cmd">/gen-test-cases → 補充 branch URL</code>
+          </div>
+          <div class="get-text">
+            從 ai-plans 讀取 Scope In/Out、Done criteria、RD 測試策略。<strong>不測項目直接對應排除</strong>，Done criteria 轉為 Happy Path 通過條件。
+          </div>
+        </div>
+      </div>
+
+      <div class="card card--gen">
+        <div class="card-bar"></div>
+        <div class="card-head">
+          <div class="card-title">Task + Slack 討論串</div>
+          <span class="skill-pill pill-gen">GEN</span>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="row-label">你有</div>
+            <div class="have-chips">
+              <span class="chip chip-req">Task ID</span>
+              <span class="chip">Slack 對話內容（貼上）</span>
+            </div>
+          </div>
+          <div>
+            <div class="row-label">指令</div>
+            <code class="cmd">/gen-test-cases → 貼入 Slack 內容</code>
+          </div>
+          <div class="get-text">
+            從非正式討論中萃取需求決策、被明確排除的情境、具體範例資料。特別適合 <strong>AC 寫得不夠完整</strong>但 Slack 有補充說明的情況。
+          </div>
+        </div>
+      </div>
+
+      <div class="card card--gen">
+        <div class="card-bar"></div>
+        <div class="card-head">
+          <div class="card-title">沒有 Scrum Tool（直接描述需求）</div>
+          <span class="skill-pill pill-gen">GEN</span>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="row-label">你有</div>
+            <div class="have-chips">
+              <span class="chip chip-req">需求文字描述</span>
+            </div>
+          </div>
+          <div>
+            <div class="row-label">指令</div>
+            <code class="cmd">/gen-test-cases → 貼上需求 → 提供輸出路徑</code>
+          </div>
+          <div class="get-text">
+            不需要任何 Scrum Tool 帳號。輸出為本機 Markdown 檔案。適合快速生成、個人筆記、或公司不用 ClickUp 的情境。
+          </div>
+        </div>
+      </div>
+
+      <div class="card card--gen">
+        <div class="card-bar"></div>
+        <div class="card-head">
+          <div class="card-title">新增整合類功能（自動套用模板）</div>
+          <span class="skill-pill pill-gen">GEN</span>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="row-label">你有</div>
+            <div class="have-chips">
+              <span class="chip chip-req">Task：標題含「新增支援」/ add provider</span>
+            </div>
+          </div>
+          <div>
+            <div class="row-label">指令</div>
+            <code class="cmd">/gen-test-cases</code>
+          </div>
+          <div class="get-text">
+            Phase 2f 自動偵測情境，套用整合類模板（條列式，含迴歸驗證區塊）。若 project.md 有自訂模板（如 new-coin, new-swap），優先套用。
+          </div>
+          <div class="note">project.md 的 templates 欄位可定義更細的觸發關鍵字（如「add chain」→ new-coin-reference.md）。</div>
+        </div>
+      </div>
+
+      <div class="card card--gen">
+        <div class="card-bar"></div>
+        <div class="card-head">
+          <div class="card-title">全組合（最完整）</div>
+          <span class="skill-pill pill-gen">GEN</span>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="row-label">你有</div>
+            <div class="have-chips">
+              <span class="chip chip-req">Task ID</span>
+              <span class="chip">PR URL</span>
+              <span class="chip">ai-plans</span>
+              <span class="chip">知識庫</span>
+            </div>
+          </div>
+          <div>
+            <div class="row-label">指令</div>
+            <code class="cmd">/gen-test-cases → 提供所有來源</code>
+          </div>
+          <div class="get-text">
+            同時取得 AC（Task）、變更範圍（PR diff）、設計意圖（ai-plans）、codebase 背景（知識庫）。產出的測試策略摘要會標注各資訊來源。
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Phase block -->
+    <div style="margin-top:16px;">
+      <div class="row-label" style="margin-bottom:8px;">測試深度：執行時必選其一</div>
+      <div class="phase-grid">
+        <div class="phase-card phase-dev">
+          <div class="phase-name">DEVELOPMENT PHASE</div>
+          <div class="phase-audience">受眾：RD｜目的：確認核心功能可用</div>
+          <ul class="phase-items">
+            <li class="check">Happy Path（1–3 條核心路徑）</li>
+            <li class="check">關鍵 Negative Cases（打壞主流程的情境）</li>
+            <li class="skip">Boundary Cases（留待 Verification 補）</li>
+            <li class="skip">細節 Negative Cases（留待 Verification 補）</li>
+            <li style="color:var(--text-3); font-size:0.7rem; margin-top:4px;">文末附：Verification phase 待補清單</li>
+          </ul>
+        </div>
+        <div class="phase-card phase-ver">
+          <div class="phase-name">VERIFICATION PHASE</div>
+          <div class="phase-audience">受眾：QA｜目的：完整覆蓋所有有意義情境</div>
+          <ul class="phase-items">
+            <li class="check">Happy Path（完整，含各種合法輸入組合）</li>
+            <li class="check">Boundary Cases（數值/字串/時間/狀態邊界）</li>
+            <li class="check">Negative Cases（缺欄位、格式錯誤、未授權、資源不存在…）</li>
+            <li class="check">已知 Bug 對應的迴歸驗證（若有 Bug 紀錄）</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ── 3. RISK-ANALYZER ── -->
+  <section class="section">
+    <div class="section-header">
+      <span class="skill-pill pill-risk">RISK-ANALYZER</span>
+      <h2 class="section-title">PR / Branch 風險評估</h2>
+    </div>
+    <p class="section-sub">不需要知識庫也能執行，但有知識庫時分析品質明顯更好。提供 ClickUp Task 則額外輸出 AC 覆蓋缺口分析。</p>
+
+    <div class="scenario-grid">
+
+      <div class="card card--risk">
+        <div class="card-bar"></div>
+        <div class="card-head">
+          <div class="card-title">Public PR（最簡入門）</div>
+          <span class="skill-pill pill-risk">RISK</span>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="row-label">你有</div>
+            <div class="have-chips">
+              <span class="chip chip-req">GitHub PR URL（public repo）</span>
+            </div>
+          </div>
+          <div>
+            <div class="row-label">指令</div>
+            <code class="cmd">/risk-analyzer → 貼入 PR URL</code>
+          </div>
+          <div class="get-text">
+            用 WebFetch 讀取 PR diff，分析 8 個風險維度。無需任何帳號設定。適合 Open Source PR review。
+          </div>
+        </div>
+      </div>
+
+      <div class="card card--risk">
+        <div class="card-bar"></div>
+        <div class="card-head">
+          <div class="card-title">Private PR（需本機 repo）</div>
+          <span class="skill-pill pill-risk">RISK</span>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="row-label">你有</div>
+            <div class="have-chips">
+              <span class="chip chip-req">GitHub PR URL（private）</span>
+              <span class="chip chip-req">Local repo path</span>
+            </div>
+          </div>
+          <div>
+            <div class="row-label">指令</div>
+            <code class="cmd">/risk-analyzer → PR URL + local path</code>
+          </div>
+          <div class="get-text">
+            改用 <code style="font-family:var(--font-mono);font-size:0.72rem;color:var(--code-text)">gh pr diff</code> 讀取完整 diff。需要 <code style="font-family:var(--font-mono);font-size:0.72rem;color:var(--code-text)">gh</code> CLI 已登入。
+          </div>
+        </div>
+      </div>
+
+      <div class="card card--risk">
+        <div class="card-bar"></div>
+        <div class="card-head">
+          <div class="card-title">Branch（尚未開 PR）</div>
+          <span class="skill-pill pill-risk">RISK</span>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="row-label">你有</div>
+            <div class="have-chips">
+              <span class="chip chip-req">Branch 名稱</span>
+              <span class="chip chip-req">Local repo path</span>
+            </div>
+          </div>
+          <div>
+            <div class="row-label">指令</div>
+            <code class="cmd">/risk-analyzer → feat/xxx + local path</code>
+          </div>
+          <div class="get-text">
+            執行 <code style="font-family:var(--font-mono);font-size:0.72rem;color:var(--code-text)">git diff main...branch</code> 分析。開發中即可提早評估風險，不用等 PR。
+          </div>
+        </div>
+      </div>
+
+      <div class="card card--risk">
+        <div class="card-bar"></div>
+        <div class="card-head">
+          <div class="card-title">PR + ClickUp Task（最完整）</div>
+          <span class="skill-pill pill-risk">RISK</span>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="row-label">你有</div>
+            <div class="have-chips">
+              <span class="chip chip-req">PR URL 或 branch</span>
+              <span class="chip chip-req">ClickUp Task ID</span>
+            </div>
+          </div>
+          <div>
+            <div class="row-label">指令</div>
+            <code class="cmd">/risk-analyzer → PR + Task ID</code>
+          </div>
+          <div class="get-text">
+            除 8 維度風險外，額外輸出 <strong>AC 覆蓋分析</strong>：哪條 AC 找不到對應實作、diff 有哪些不在 AC 裡的改動。
+          </div>
+        </div>
+      </div>
+
+      <div class="card card--risk">
+        <div class="card-bar"></div>
+        <div class="card-head">
+          <div class="card-title">無知識庫（降級模式）</div>
+          <span class="skill-pill pill-risk">RISK</span>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="row-label">你有</div>
+            <div class="have-chips">
+              <span class="chip chip-req">PR URL</span>
+              <span class="chip" style="color:var(--text-3); border-style:dashed;">知識庫（尚未建立）</span>
+            </div>
+          </div>
+          <div>
+            <div class="row-label">指令</div>
+            <code class="cmd">/risk-analyzer → 選擇繼續</code>
+          </div>
+          <div class="get-text">
+            仍可執行，但無法對照「已知風險模組」做深度分析。Skill 會提示先執行 <code style="font-family:var(--font-mono);font-size:0.72rem;color:var(--code-text)">/repo-scout</code>，詢問是否仍繼續。
+          </div>
+        </div>
+      </div>
+
+      <div class="card card--risk">
+        <div class="card-bar"></div>
+        <div class="card-head">
+          <div class="card-title">直接貼入 Diff</div>
+          <span class="skill-pill pill-risk">RISK</span>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="row-label">你有</div>
+            <div class="have-chips">
+              <span class="chip chip-req">Raw diff 或變更說明</span>
+            </div>
+          </div>
+          <div>
+            <div class="row-label">指令</div>
+            <code class="cmd">/risk-analyzer → 直接貼上 diff</code>
+          </div>
+          <div class="get-text">
+            最靈活的入口，不需要 GitHub 帳號或 local repo。適合 code review 時快速臨時分析。
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Risk output preview -->
+    <div style="margin-top:16px; background:var(--surf); border:1px solid var(--border); border-radius:var(--r); padding:16px;">
+      <div class="row-label" style="margin-bottom:10px;">輸出內容（每次執行都包含）</div>
+      <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap:8px;">
+        <div style="font-size:0.75rem; color:var(--text-2); padding:6px 10px; background:var(--bg); border-radius:3px; border:1px solid var(--border-lo);">🔴🟡🟢 風險明細表（8 個維度）</div>
+        <div style="font-size:0.75rem; color:var(--text-2); padding:6px 10px; background:var(--bg); border-radius:3px; border:1px solid var(--border-lo);">AC 覆蓋缺口分析（有 Task 時）</div>
+        <div style="font-size:0.75rem; color:var(--text-2); padding:6px 10px; background:var(--bg); border-radius:3px; border:1px solid var(--border-lo);">範圍外改動標記</div>
+        <div style="font-size:0.75rem; color:var(--text-2); padding:6px 10px; background:var(--bg); border-radius:3px; border:1px solid var(--border-lo);">建議測試重點清單</div>
+        <div style="font-size:0.75rem; color:var(--text-2); padding:6px 10px; background:var(--bg); border-radius:3px; border:1px solid var(--border-lo);">部署前 checklist</div>
+        <div style="font-size:0.75rem; color:var(--text-2); padding:6px 10px; background:var(--bg); border-radius:3px; border:1px solid var(--border-lo);">銜接 /gen-test-cases 的提示</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ── 4. REPO-SCOUT ── -->
+  <section class="section">
+    <div class="section-header">
+      <span class="skill-pill pill-scout">REPO-SCOUT</span>
+      <h2 class="section-title">建立 Codebase 知識庫</h2>
+    </div>
+    <p class="section-sub">知識庫是快照，不上傳至 git，換公司或 repo 有大改動時重新執行。gen-test-cases 與 risk-analyzer 都會在背景自動讀取。</p>
+
+    <div class="scenario-grid">
+
+      <div class="card card--scout">
+        <div class="card-bar"></div>
+        <div class="card-head">
+          <div class="card-title">初次掃描（Comprehensive）</div>
+          <span class="skill-pill pill-scout">SCOUT</span>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="row-label">你有</div>
+            <div class="have-chips">
+              <span class="chip chip-req">Local repo path</span>
+            </div>
+          </div>
+          <div>
+            <div class="row-label">指令</div>
+            <code class="cmd">/repo-scout → path → comprehensive</code>
+          </div>
+          <div class="get-text">
+            掃描根目錄 + 核心 source 目錄，建立完整知識快照：架構、模組、API 清單、已知風險點。Token：<strong>20k–80k</strong>。
+          </div>
+          <div class="note">第一次加入新公司時建議執行，之後按需更新。</div>
+        </div>
+      </div>
+
+      <div class="card card--scout">
+        <div class="card-bar"></div>
+        <div class="card-head">
+          <div class="card-title">快速架構概覽（Quick）</div>
+          <span class="skill-pill pill-scout">SCOUT</span>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="row-label">你有</div>
+            <div class="have-chips">
+              <span class="chip chip-req">Local repo path</span>
+            </div>
+          </div>
+          <div>
+            <div class="row-label">指令</div>
+            <code class="cmd">/repo-scout → path → quick</code>
+          </div>
+          <div class="get-text">
+            只讀 README + package manager 檔案。快速了解 tech stack 與整體架構，不深入模組細節。Token：<strong>3k–8k</strong>。
+          </div>
+        </div>
+      </div>
+
+      <div class="card card--scout">
+        <div class="card-bar"></div>
+        <div class="card-head">
+          <div class="card-title">定向掃描（Focused）</div>
+          <span class="skill-pill pill-scout">SCOUT</span>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="row-label">你有</div>
+            <div class="have-chips">
+              <span class="chip chip-req">Local repo path</span>
+              <span class="chip chip-req">目標模組或關鍵字</span>
+            </div>
+          </div>
+          <div>
+            <div class="row-label">指令</div>
+            <code class="cmd">/repo-scout → path → focused → keywords</code>
+          </div>
+          <div class="get-text">
+            只深入掃描與關鍵字相關的目錄與檔案。適合需要了解特定模組（例如「auth」、「payment」）時使用。Token：<strong>5k–15k</strong>。
+          </div>
+        </div>
+      </div>
+
+      <div class="card card--scout">
+        <div class="card-bar"></div>
+        <div class="card-head">
+          <div class="card-title">Public GitHub Repo</div>
+          <span class="skill-pill pill-scout">SCOUT</span>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="row-label">你有</div>
+            <div class="have-chips">
+              <span class="chip chip-req">GitHub Repo URL（public）</span>
+            </div>
+          </div>
+          <div>
+            <div class="row-label">指令</div>
+            <code class="cmd">/repo-scout → GitHub URL</code>
+          </div>
+          <div class="get-text">
+            用 WebFetch 讀取 GitHub 上的檔案，不需要 clone。適合第三方 library 或 Open Source 專案分析。
+          </div>
+          <div class="note">Private repo 無法用 WebFetch，需 clone 至本機後提供 local path。</div>
+        </div>
+      </div>
+
+      <div class="card card--scout">
+        <div class="card-bar"></div>
+        <div class="card-head">
+          <div class="card-title">更新現有知識庫</div>
+          <span class="skill-pill pill-scout">SCOUT</span>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="row-label">你有</div>
+            <div class="have-chips">
+              <span class="chip chip-req">已有知識庫的 Local repo</span>
+              <span class="chip">Major refactor 完成</span>
+            </div>
+          </div>
+          <div>
+            <div class="row-label">指令</div>
+            <code class="cmd">/repo-scout → 同 repo path → 覆蓋更新</code>
+          </div>
+          <div class="get-text">
+            重新掃描，更新 `knowledge/repos/<repo>.md`。知識庫會標注更新時間戳。日常小 PR 不需要更新，大架構調整後執行。
+          </div>
+        </div>
+      </div>
+
+      <div class="card card--scout">
+        <div class="card-bar"></div>
+        <div class="card-head">
+          <div class="card-title">多個 Repo（微服務架構）</div>
+          <span class="skill-pill pill-scout">SCOUT</span>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="row-label">你有</div>
+            <div class="have-chips">
+              <span class="chip chip-req">多個 local repo paths</span>
+            </div>
+          </div>
+          <div>
+            <div class="row-label">指令</div>
+            <code class="cmd">/repo-scout（每個 repo 分別執行一次）</code>
+          </div>
+          <div class="get-text">
+            每個 repo 產出一份獨立的 `.md` 知識檔案。risk-analyzer 跨 repo 分析時，可同時讀取多份知識庫了解服務邊界。
+          </div>
+          <div class="note">在 project.md 的 repos 欄位列出 repo 名稱，可加速 skill 的自動匹配。</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <span>qa-intel · 可攜式個人 QA 工具集</span>
+    <span>知識庫與公司配置不上傳 · <code>.gitignore</code> 已設定</span>
+  </footer>
+
+</div>
