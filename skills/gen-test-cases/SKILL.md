@@ -1,6 +1,6 @@
 ---
 name: gen-test-cases
-description: 從票卡（ClickUp / Jira / Linear）或需求描述，分析功能並產出結構化手動測試案例清單，支援 Development phase（開發中，輕量）與 Verification phase（測試/驗收，完整）兩種模式。輸出為 Markdown 或回寫至 PM 工具。當使用者說「幫我產生測試案例」、「列出測試項目」、「這個功能怎麼測」、「分析測試點」、「gen test cases」、「建立測試計畫」，或提供 Task ID 並要求建立測試計畫時觸發。尚未適用於撰寫測試程式碼。
+description: 從票卡（ClickUp / Jira / Linear）或需求描述，分析功能並產出結構化手動測試案例清單，支援 Development phase（開發中，輕量）與 Verification phase（測試/驗收，完整）兩種模式。輸出為 Markdown 或回寫至 Scrum Tool。當使用者說「幫我產生測試案例」、「列出測試項目」、「這個功能怎麼測」、「分析測試點」、「gen test cases」、「建立測試計畫」，或提供 Task ID 並要求建立測試計畫時觸發。尚未適用於撰寫測試程式碼。
 ---
 
 # gen-test-cases

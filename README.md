@@ -29,7 +29,7 @@ qa-intel/
 | Skill | 指令 | 說明 |
 |-------|------|------|
 | repo-scout | `/repo-scout` | 掃描 repo，建立結構化知識庫快照 |
-| risk-analyzer | `/risk-analyzer` | 分析 PR / branch 的開發風險，可結合 PM 工具的 AC |
+| risk-analyzer | `/risk-analyzer` | 分析 PR / branch 的開發風險，可結合 Scrum Tool的 AC |
 | gen-test-cases | `/gen-test-cases` | 從 task 或需求描述產出手動測試案例 |
 
 ---
@@ -104,7 +104,7 @@ git clone https://github.com/your-username/qa-intel ~/.claude/plugins/qa-intel
 ```
 /gen-test-cases（Task ID）
 → 產出完整 Verification phase 測試案例
-→ 自動寫入 PM 工具（ClickUp / Jira）
+→ 自動寫入 Scrum Tool（ClickUp / Jira）
 ```
 
 ---
@@ -115,7 +115,7 @@ git clone https://github.com/your-username/qa-intel ~/.claude/plugins/qa-intel
 |------|------|--------|
 | Claude Code CLI | 執行所有 skill | 必要 |
 | `gh` CLI（已登入） | `risk-analyzer` 讀取 private PR diff | PR 分析時需要 |
-| PM 工具 API Token | gen-test-cases 讀寫 PM 工具 | 依 `pm_tool` 設定 |
+| Scrum Tool API Token | gen-test-cases 讀寫 Scrum Tool | 依 `pm_tool` 設定 |
 
 ---
 
@@ -149,5 +149,5 @@ repo 有重大架構調整時執行 `/repo-scout` 更新。
 
 - Phase 1：輸入自動化（自動偵測當前 branch PR、從 branch 名稱萃取 Task ID）
 - Phase 2：risk-analyzer → gen-test-cases 直接銜接（風險報告自動轉為測試重點）
-- Phase 3：更多 PM 工具支援（Jira、Linear）
+- Phase 3：更多 Scrum Tool支援（Jira、Linear）
 - Phase 4：Integration / E2E Test 自動產出
