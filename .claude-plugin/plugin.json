@@ -1,0 +1,10 @@
+{
+  "name": "qa-intel",
+  "version": "1.0.0",
+  "description": "個人 QA 智慧系統：codebase 知識庫、風險分析、測試案例產出",
+  "author": {
+    "name": "Kevin Lee"
+  },
+  "license": "MIT",
+  "keywords": ["qa", "testing", "risk-analysis", "test-cases"]
+}

@@ -1,0 +1,5 @@
+# 知識庫快照（每個環境自行建立，不上傳）
+knowledge/repos/
+
+# macOS
+.DS_Store
