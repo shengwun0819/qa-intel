@@ -1,0 +1,28 @@
+name: Validate
+
+on: [push, pull_request]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate plugin.json
+        run: python3 -m json.tool .claude-plugin/plugin.json > /dev/null
+
+      - name: Validate SKILL.md / AGENT.md frontmatter
+        run: |
+          for f in skills/*/SKILL.md agents/*/AGENT.md; do
+            echo "Checking $f..."
+            python3 -c "
+          import re, sys
+          content = open('$f').read()
+          fm = re.search(r'^---\n(.*?)\n---', content, re.DOTALL)
+          assert fm, '$f: Missing frontmatter'
+          body = fm.group(1)
+          assert 'name:' in body, '$f: Missing name field'
+          assert 'description:' in body, '$f: Missing description field'
+          print('OK')
+          "
+          done
