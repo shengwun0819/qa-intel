@@ -366,7 +366,7 @@
       <span class="skill-pill pill-setup">SETUP</span>
       <h2 class="section-title">第一次使用：從安裝到第一個指令</h2>
     </div>
-    <p class="section-sub">所有 skill 在沒有專案配置的情況下仍可運作（通用模式）。Step 2–3 是讓工具更貼合你公司的設定，非必要。</p>
+    <p class="section-sub">所有 skill 目前都以通用模式運作。Step 2–3 的專案配置（project.md）<strong>尚在規劃中，尚未實作</strong>，現階段請略過。</p>
 
     <div class="setup-flow">
       <div class="setup-step">
@@ -377,25 +377,25 @@
       </div>
       <div class="setup-step">
         <span class="step-num">STEP 02 <span class="optional-badge">選用</span></span>
-        <div class="step-title">建立專案配置</div>
-        <div class="step-body">複製 TestProject 為你公司的配置目錄。</div>
+        <div class="step-title">建立專案配置（規劃中，尚未實作）</div>
+        <div class="step-body">未來版本：複製範例專案為你公司的配置目錄。目前 repo 內沒有 projects/ 目錄。</div>
         <div class="step-cmd">cp -r projects/TestProject projects/MyCompany</div>
       </div>
       <div class="setup-step">
         <span class="step-num">STEP 03 <span class="optional-badge">選用</span></span>
-        <div class="step-title">填入 project.md</div>
-        <div class="step-body">設定 Scrum Tool、Bug 紀錄位置、裝置/範圍預設、自訂模板。不填則通用模式繼續。</div>
+        <div class="step-title">填入 project.md（規劃中，尚未實作）</div>
+        <div class="step-body">未來版本：設定 Scrum Tool、Bug 紀錄位置、裝置/範圍預設、自訂模板。目前所有 skill 都不讀取 project.md。</div>
       </div>
       <div class="setup-step">
         <span class="step-num">STEP 04 <span class="optional-badge">選用</span></span>
         <div class="step-title">建立知識庫</div>
-        <div class="step-body">掃描 repo，讓 risk-analyzer 與 gen-test-cases 有 codebase 背景知識。</div>
+        <div class="step-body">掃描 repo，讓 risk-analyzer 與 gen-test-cases 有 codebase 背景知識。知識庫寫入 ~/.qa-intel/knowledge/repos/。</div>
         <div class="step-cmd">/repo-scout</div>
       </div>
       <div class="setup-step" style="background:var(--surf-hi)">
         <span class="step-num" style="color:var(--scout)">READY</span>
         <div class="step-title">開始使用</div>
-        <div class="step-body">執行任意 skill。Phase 0 會自動偵測並載入你的專案配置。</div>
+        <div class="step-body">執行任意 skill。目前以通用模式運作，專案配置自動載入尚在規劃中。</div>
         <div class="step-cmd">/gen-test-cases</div>
       </div>
     </div>
@@ -433,7 +433,7 @@
           <div class="get-text">
             讀取 Task 的 title、description、AC、留言。若有知識庫則自動補充 codebase 背景。輸出完整測試案例並寫入 Scrum Tool。
           </div>
-          <div class="note">無 project.md 時以通用模式執行，裝置/範圍會在執行中詢問。</div>
+          <div class="note">裝置/範圍會在執行中詢問。</div>
         </div>
       </div>
 
@@ -575,9 +575,9 @@
             <code class="cmd">/gen-test-cases</code>
           </div>
           <div class="get-text">
-            Phase 2f 自動偵測情境，套用整合類模板（條列式，含迴歸驗證區塊）。若 project.md 有自訂模板（如 new-coin, new-swap），優先套用。
+            Phase 2f 自動偵測情境，套用整合類模板（條列式，含迴歸驗證區塊）。（自訂模板與觸發關鍵字為規劃中功能，尚未實作。）
           </div>
-          <div class="note">project.md 的 templates 欄位可定義更細的觸發關鍵字（如「add chain」→ new-coin-reference.md）。</div>
+          <div class="note">目前僅內建 new-provider-reference.md 一份整合類模板。</div>
         </div>
       </div>
 
@@ -631,7 +631,7 @@
             <li class="check">Happy Path（完整，含各種合法輸入組合）</li>
             <li class="check">Boundary Cases（數值/字串/時間/狀態邊界）</li>
             <li class="check">Negative Cases（缺欄位、格式錯誤、未授權、資源不存在…）</li>
-            <li class="check">已知 Bug 對應的迴歸驗證（若有 Bug 紀錄）</li>
+            <li class="check">已知 Bug 對應的迴歸驗證（規劃中，尚未實作）</li>
           </ul>
         </div>
       </div>
@@ -959,7 +959,7 @@
           <div class="get-text">
             每個 repo 產出一份獨立的 `.md` 知識檔案。risk-analyzer 跨 repo 分析時，可同時讀取多份知識庫了解服務邊界。
           </div>
-          <div class="note">在 project.md 的 repos 欄位列出 repo 名稱，可加速 skill 的自動匹配。</div>
+          <div class="note">repo 名稱以知識庫檔名（&lt;repo&gt;.md）為準，skill 依此比對。</div>
         </div>
       </div>
 
