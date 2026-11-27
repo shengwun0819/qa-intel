@@ -1,14 +1,14 @@
 ---
 name: risk-analyzer
-description: 讀取 PR diff 或 branch 變更，對照知識庫（{qa-intel-root}/knowledge/repos/）評估開發風險，產出風險報告與建議測試重點。當使用者說「幫我評估這個 PR 的風險」、「這個改動有什麼風險」、「risk-analyzer」、「分析開發風險」時觸發。需先執行 /repo-scout 建立對應 repo 的知識庫。
+description: 讀取 PR diff 或 branch 變更，對照知識庫（~/.qa-intel/knowledge/repos/）評估開發風險，產出風險報告與建議測試重點。當使用者說「幫我評估這個 PR 的風險」、「這個改動有什麼風險」、「risk-analyzer」、「分析開發風險」時觸發。需先執行 /repo-scout 建立對應 repo 的知識庫。
 ---
 
 # risk-analyzer
 
 對照 codebase 知識庫，分析 PR 或 branch 的開發風險，輸出風險評估報告。
 
-知識庫路徑：`{qa-intel-root}/knowledge/repos/`
-（`{qa-intel-root}` 為 qa-intel 安裝目錄，含 `plugin.json` 的那個根目錄）
+知識庫路徑：`${QA_INTEL_HOME}/knowledge/repos/`；未設定環境變數 `QA_INTEL_HOME` 時為 `~/.qa-intel/knowledge/repos/`。
+（由 /repo-scout 寫入，與 gen-test-cases 讀取同一路徑。）
 
 ---
 
@@ -61,8 +61,8 @@ description: 讀取 PR diff 或 branch 變更，對照知識庫（{qa-intel-root
 
 ### 2a. 讀取知識庫
 
-1. 定位 qa-intel 根目錄（與 gen-test-cases Phase 0 相同方式：找含 `plugin.json` 且路徑含 `qa-intel` 的目錄）
-2. 確認 `{qa-intel-root}/knowledge/repos/<repo-name>.md` 存在
+1. 決定知識庫目錄：`$QA_INTEL_HOME/knowledge/repos/`，未設定 `QA_INTEL_HOME` 時為 `~/.qa-intel/knowledge/repos/`
+2. 確認 `<知識庫目錄>/<repo-name>.md` 存在
 3. 若不存在：告知使用者：
    > 尚未建立 `<repo-name>` 的知識庫，建議先執行 `/repo-scout` 掃描此 repo。
    > 是否仍要繼續？（將以有限資訊進行風險分析）
@@ -77,19 +77,24 @@ description: 讀取 PR diff 或 branch 變更，對照知識庫（{qa-intel-root
   - 否則告知使用者改提供 local repo path 或直接貼入 diff
 
 **若提供 local branch：**
-1. 在 repo 路徑下執行：
+1. 先決定 base 分支 `<base>`（不要假設是 `main`）：
    ```bash
-   git diff main...<branch> --name-only
+   git symbolic-ref --short refs/remotes/origin/HEAD | sed 's|^origin/||'
+   ```
+   若指令失敗，依序檢查 `main`、`master`、`develop` 哪個存在；仍無法判斷就詢問使用者。
+2. 在 repo 路徑下執行：
+   ```bash
+   git diff <base>...<branch> --name-only
    ```
    取得 changed files 清單
-2. 執行：
+3. 執行：
    ```bash
-   git diff main...<branch> --stat
+   git diff <base>...<branch> --stat
    ```
    了解變更規模
-3. 對高風險模組執行完整 diff：
+4. 對高風險模組執行完整 diff：
    ```bash
-   git diff main...<branch> -- <high-risk-file>
+   git diff <base>...<branch> -- <high-risk-file>
    ```
 
 **若直接描述變更：**

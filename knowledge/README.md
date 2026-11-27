@@ -4,10 +4,19 @@ qa-intel 所有 skill 共用的結構化知識儲存區。
 
 ---
 
+## 存放位置
+
+知識庫存放在 plugin 目錄**之外**，plugin 更新或重裝不會覆蓋：
+
+- 預設：`~/.qa-intel/knowledge/repos/`
+- 可用環境變數 `QA_INTEL_HOME` 改變根目錄，知識庫即為 `$QA_INTEL_HOME/knowledge/repos/`
+
+三個 skill（repo-scout 寫入；risk-analyzer、gen-test-cases 讀取）都使用同一路徑。本資料夾僅放說明文件。
+
 ## 目錄結構
 
 ```
-knowledge/
+~/.qa-intel/knowledge/
 └── repos/
     ├── <repo-name>.md    # 由 /repo-scout 建立，每個 repo 一個檔案
     └── ...

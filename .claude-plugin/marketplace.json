@@ -1,0 +1,16 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "qa-intel",
+  "description": "個人 QA 智慧系統：codebase 知識庫、風險分析、測試案例產出",
+  "owner": {
+    "name": "Kevin Lee"
+  },
+  "plugins": [
+    {
+      "name": "qa-intel",
+      "description": "AI-driven QA toolkit：手動測試案例產出、PR 風險評估、codebase 知識庫",
+      "source": "./",
+      "category": "testing"
+    }
+  ]
+}

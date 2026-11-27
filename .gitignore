@@ -1,4 +1,4 @@
-# 知識庫快照（每個環境自行建立，不上傳）
+# 舊版知識庫位置。現在改放 ~/.qa-intel/knowledge/repos/（不在 repo 內），保留此行以防誤 commit
 knowledge/repos/
 
 # macOS

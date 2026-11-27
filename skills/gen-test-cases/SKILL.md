@@ -1,6 +1,6 @@
 ---
 name: gen-test-cases
-description: 從票卡（ClickUp / Jira / Linear）或需求描述，分析功能並產出結構化手動測試案例清單，支援 Development phase（開發中，輕量）與 Verification phase（測試/驗收，完整）兩種模式。輸出為 Markdown 或回寫至 Scrum Tool。當使用者說「幫我產生測試案例」、「列出測試項目」、「這個功能怎麼測」、「分析測試點」、「gen test cases」、「建立測試計畫」，或提供 Task ID 並要求建立測試計畫時觸發。尚未適用於撰寫測試程式碼。
+description: 從 ClickUp 票卡（Jira、Linear 尚未支援）或需求描述，分析功能並產出結構化手動測試案例清單，支援 Development phase（開發中，輕量）與 Verification phase（測試/驗收，完整）兩種模式。輸出為 Markdown 或回寫至 ClickUp。當使用者說「幫我產生測試案例」、「列出測試項目」、「這個功能怎麼測」、「分析測試點」、「gen test cases」、「建立測試計畫」，或提供 Task ID 並要求建立測試計畫時觸發。尚未適用於撰寫測試程式碼。
 ---
 
 # gen-test-cases
@@ -38,8 +38,8 @@ description: 從票卡（ClickUp / Jira / Linear）或需求描述，分析功�
 
 可透過以下五種方式給予補充，可混用，每種都可提供多個：
 
-1. **GitHub Repo URL** — Phase 2b 將以 `WebFetch` 讀取 README 與相關 source code
-2. **Local Source Code Path** — Phase 2b 將以 `Read` / `Bash` 讀取本機路徑下的 source code
+1. **GitHub Repo URL** — Phase 2b-2 將以 `WebFetch` 讀取 README 與相關 source code
+2. **Local Source Code Path** — Phase 2b-2 將以 `Read` / `Bash` 讀取本機路徑下的 source code
 3. **Slack 對話內容** — 請使用者直接複製貼上相關的 Slack 討論內容，Phase 2c 將從中萃取需求決策、邊界條件討論與具體範例
 4. **GitHub PR URL** — Phase 2d 將讀取 PR diff，了解實際程式碼變更的檔案與範圍（例如 `github.com/org/repo/pull/123`）
 5. **GitHub Branch URL 或 Local ai-plans Path** — Phase 2e 將讀取指定 branch 或本機路徑下的 ai-plans 資料夾，萃取設計決策、範圍與風險（例如 `github.com/org/repo/tree/feature-branch` 或 `/Users/.../repo/ai-plans`）
@@ -85,7 +85,7 @@ Phase 3 與 Phase 4 的輸出格式依此選擇執行，不再切換。
 
 ### 2a. 讀取知識庫（自動）
 
-1. 尋找 qa-intel 安裝目錄下的 `knowledge/repos/`（與 `plugin.json` 同層）
+1. 讀取知識庫目錄 `${QA_INTEL_HOME}/knowledge/repos/`（未設定環境變數 `QA_INTEL_HOME` 時為 `~/.qa-intel/knowledge/repos/`）
 2. 列出該目錄下所有 `.md` 檔案
 3. 依 Task 標題或使用者描述的功能名稱，判斷最相關的知識檔案
 4. 若找到對應檔案，讀取其「核心模組」、「API / 介面」、「已知風險模組」欄位
@@ -125,7 +125,7 @@ Phase 3 與 Phase 4 的輸出格式依此選擇執行，不再切換。
 **若來源為直接描述：**
 直接使用使用者提供的需求文字。
 
-### 2b. 補充原始碼上下文（若有提供 GitHub Repo 或 Local Path）
+### 2b-2. 補充原始碼上下文（若有提供 GitHub Repo 或 Local Path）
 
 **去重原則：** 若某個 GitHub Repo URL 與某個 Local Source Code Path 明顯對應同一個 repo（repo 名稱相同），**優先使用 Local Path，跳過該 GitHub URL**，避免重複讀取相同內容。
 
@@ -219,7 +219,7 @@ Phase 3 與 Phase 4 的輸出格式依此選擇執行，不再切換。
 - **表格式**（預設，使用者未指定時採用）→ 參考 `templates/test-case-spec.md`，以 Markdown Table 呈現，依序執行 3a–3e
 - **條列式**（使用者明確選擇時）→ 參考 `templates/general-reference.md`，以功能區塊 + 編號清單呈現，跳過 3a 策略摘要，直接從 3b 開始產出後進入 3e
 
-**表格式輸出格式規定（嚴格遵守，僅適用選項 B）：**
+**表格式輸出格式規定（嚴格遵守；適用所有選擇表格式的輸出，不論需求來源為 ClickUp Task 或直接描述）：**
 - 測試案例**必須使用 Markdown Table 格式**，欄位順序如下：
 
   | Case ID | 測試標題 | 前置條件 | 測試步驟 | 預期結果 | 優先級 | 受眾 | 測試結果 |
@@ -369,7 +369,7 @@ Development phase案例產出完成後，在文件末尾附上以下待補清單
 
 **Step 2：第三方 ClickUp MCP（`mcp__clickup__`，`@taazkareem/clickup-mcp-server`）**
 
-嘗試呼叫 `mcp__clickup__create_document`：
+嘗試呼叫 `mcp__clickup__clickup_create_document`：
 - 成功 → 繼續用同一 MCP 執行 Step 2–4
 - 回傳 premium lock 或工具不存在 → 降級至方式二
 
