@@ -1,13 +1,14 @@
 ---
 name: repo-scout
-description: 掃描指定 repository，萃取結構化知識並寫入 ~/self_project/qa-intel/knowledge/repos/<name>.md，供 risk-analyzer、gen-test-cases 等 skill 使用。支援單一與批次掃描。當使用者說「幫我掃描這個 repo」、「建立 repo 知識庫」、「讓你了解這個專案」、「repo-scout」時觸發。
+description: 掃描指定 repository，萃取結構化知識並寫入 ~/.qa-intel/knowledge/repos/<name>.md，供 risk-analyzer、gen-test-cases 等 skill 使用。支援單一與批次掃描。當使用者說「幫我掃描這個 repo」、「建立 repo 知識庫」、「讓你了解這個專案」、「repo-scout」時觸發。
 ---
 
 # repo-scout
 
 掃描 repository，將 codebase 知識結構化後寫入知識庫，作為 qa-intel 所有 skill 的共同基礎。
 
-知識庫路徑：`~/qa-intel/knowledge/repos/`
+知識庫路徑：`${QA_INTEL_HOME}/knowledge/repos/`；未設定環境變數 `QA_INTEL_HOME` 時為 `~/.qa-intel/knowledge/repos/`。
+資料存放在 plugin 目錄之外（plugin 更新不會覆蓋），risk-analyzer、gen-test-cases 讀取同一路徑。
 
 ---
 
@@ -95,6 +96,10 @@ description: 掃描指定 repository，萃取結構化知識並寫入 ~/self_pro
    列出所有非隱藏檔案 / 目錄，了解整體佈局。
 
 4. **Config 檔**：尋找並讀取 `.env.example`、`config/`、`src/config.*`、`*.config.ts` 等設定檔，了解環境變數與設定結構。
+
+> **委派 repo-reader（選用）**：Comprehensive 模式下 2a–2d 的讀取量大，可交給 `repo-reader` sub-agent 執行，
+> 請它依本節範圍讀取並以其固定輸出格式回傳，主 session 只負責 Phase 3 的整理與確認，可避免撐滿 context。
+> 若 sub-agent 不可用，則由本 skill 直接依下列步驟讀取。
 
 ### 2b. 核心模組深讀
 
@@ -186,12 +191,12 @@ keywords: [<掃描用的 keywords，若 Focused 模式>]
 
 ## Phase 4 — 寫入知識庫
 
-1. 確認 `~/self_project/qa-intel/knowledge/repos/` 目錄存在；若無則建立
+1. 確認 `~/.qa-intel/knowledge/repos/` 目錄存在；若無則建立
 2. 若 `<repo-name>.md` 已存在，告知使用者：
    > `<repo-name>.md` 已存在（上次掃描：<date>），將以本次結果覆蓋。
-3. 使用 `Write` 將 Phase 3 產出寫入 `~/self_project/qa-intel/knowledge/repos/<repo-name>.md`
+3. 使用 `Write` 將 Phase 3 產出寫入 `~/.qa-intel/knowledge/repos/<repo-name>.md`
 4. 告知使用者：
-   > ✓ 知識庫已建立：`~/self_project/qa-intel/knowledge/repos/<repo-name>.md`
+   > ✓ 知識庫已建立：`~/.qa-intel/knowledge/repos/<repo-name>.md`
    >
    > 現在可以使用：
    > - `/risk-analyzer` — 分析 PR 或 branch 的開發風險

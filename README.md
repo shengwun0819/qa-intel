@@ -16,10 +16,9 @@ qa-intel/
 │   ├── repo-scout/       # Skill：掃描 repo → 建立知識庫
 │   ├── risk-analyzer/    # Skill：PR / branch 風險評估
 │   └── gen-test-cases/   # Skill：產出手動測試案例
-├── knowledge/
-│   └── repos/            # 知識庫（由 repo-scout 寫入，不上傳至 git）
+├── knowledge/            # 知識庫格式說明（實際資料在 ~/.qa-intel/knowledge/repos/，不在本 repo）
 └── agents/
-    └── repo-reader/      # Sub-agent：codebase 深度閱讀（被 repo-scout 呼叫）
+    └── repo-reader.md    # Sub-agent：codebase 深度閱讀（被 repo-scout 呼叫）
 ```
 
 ---
@@ -59,7 +58,7 @@ git clone https://github.com/your-username/qa-intel ~/.claude/plugins/qa-intel
 > 模式：comprehensive（初次建議）
 ```
 
-產出：`knowledge/repos/<repo-name>.md`（本機保存，不上傳至 git）
+產出：`~/.qa-intel/knowledge/repos/<repo-name>.md`（本機保存，位於 plugin 目錄之外；可用環境變數 `QA_INTEL_HOME` 改變根目錄）
 
 ### Step 2：分析開發風險（merge 前）
 
