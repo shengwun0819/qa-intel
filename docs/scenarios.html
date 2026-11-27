@@ -423,7 +423,7 @@
           <div>
             <div class="row-label">你有</div>
             <div class="have-chips">
-              <span class="chip chip-req">ClickUp / Jira Task ID</span>
+              <span class="chip chip-req">ClickUp Task ID</span>
             </div>
           </div>
           <div>
@@ -431,7 +431,7 @@
             <code class="cmd">/gen-test-cases</code>
           </div>
           <div class="get-text">
-            讀取 Task 的 title、description、AC、留言。若有知識庫則自動補充 codebase 背景。輸出完整測試案例並寫入 Scrum Tool。
+            讀取 Task 的 title、description、AC、留言。若有知識庫則自動補充 codebase 背景。產出測試案例，經你確認後寫成 ClickUp Doc 並在 Task 留言。
           </div>
           <div class="note">裝置/範圍會在執行中詢問。</div>
         </div>
@@ -537,7 +537,7 @@
       <div class="card card--gen">
         <div class="card-bar"></div>
         <div class="card-head">
-          <div class="card-title">沒有 Scrum Tool（直接描述需求）</div>
+          <div class="card-title">沒有票卡（直接描述需求）</div>
           <span class="skill-pill pill-gen">GEN</span>
         </div>
         <div class="card-body">
@@ -552,7 +552,7 @@
             <code class="cmd">/gen-test-cases → 貼上需求 → 提供輸出路徑</code>
           </div>
           <div class="get-text">
-            不需要任何 Scrum Tool 帳號。輸出為本機 Markdown 檔案。適合快速生成、個人筆記、或公司不用 ClickUp 的情境。
+            不需要 ClickUp 帳號。輸出為本機 Markdown 檔案。適合快速生成、個人筆記、或公司不用 ClickUp 的情境。
           </div>
         </div>
       </div>
@@ -816,7 +816,7 @@
       <span class="skill-pill pill-scout">REPO-SCOUT</span>
       <h2 class="section-title">建立 Codebase 知識庫</h2>
     </div>
-    <p class="section-sub">知識庫是快照，不上傳至 git，換公司或 repo 有大改動時重新執行。gen-test-cases 與 risk-analyzer 都會在背景自動讀取。</p>
+    <p class="section-sub">知識庫是快照，存放在 ~/.qa-intel/ 而非 plugin 目錄，換公司或 repo 有大改動時重新執行。gen-test-cases 與 risk-analyzer 都會在背景自動讀取。</p>
 
     <div class="scenario-grid">
 
@@ -954,10 +954,10 @@
           </div>
           <div>
             <div class="row-label">指令</div>
-            <code class="cmd">/repo-scout（每個 repo 分別執行一次）</code>
+            <code class="cmd">/repo-scout（一次列出多個 repo 批次掃描）</code>
           </div>
           <div class="get-text">
-            每個 repo 產出一份獨立的 `.md` 知識檔案。risk-analyzer 跨 repo 分析時，可同時讀取多份知識庫了解服務邊界。
+            每個 repo 產出一份獨立的 `.md` 知識檔案。risk-analyzer 一次分析一個 repo，依 repo 名稱讀取對應的知識檔案；同時跨 repo 分析尚未支援。
           </div>
           <div class="note">repo 名稱以知識庫檔名（&lt;repo&gt;.md）為準，skill 依此比對。</div>
         </div>
@@ -969,7 +969,7 @@
   <!-- Footer -->
   <footer class="footer">
     <span>qa-intel · 可攜式個人 QA 工具集</span>
-    <span>知識庫與公司配置不上傳 · <code>.gitignore</code> 已設定</span>
+    <span>知識庫存放於 <code>~/.qa-intel/</code>，不在 plugin 目錄內</span>
   </footer>
 
 </div>

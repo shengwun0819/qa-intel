@@ -16,9 +16,12 @@ qa-intel/
 │   ├── repo-scout/       # Skill：掃描 repo → 建立知識庫
 │   ├── risk-analyzer/    # Skill：PR / branch 風險評估
 │   └── gen-test-cases/   # Skill：產出手動測試案例
+├── agents/
+│   └── repo-reader.md    # Sub-agent：codebase 深度閱讀（repo-scout 可委派）
 ├── knowledge/            # 知識庫格式說明（實際資料在 ~/.qa-intel/knowledge/repos/，不在本 repo）
-└── agents/
-    └── repo-reader.md    # Sub-agent：codebase 深度閱讀（被 repo-scout 呼叫）
+├── docs/scenarios.html   # 使用情境完整說明
+├── scripts/validate.py   # 結構與一致性檢查（CI 也會執行）
+└── CLAUDE.md             # 給 Claude Code 的開發指引
 ```
 
 ---
@@ -28,23 +31,21 @@ qa-intel/
 | Skill | 指令 | 說明 |
 |-------|------|------|
 | repo-scout | `/repo-scout` | 掃描 repo，建立結構化知識庫快照 |
-| risk-analyzer | `/risk-analyzer` | 分析 PR / branch 的開發風險，可結合 Scrum Tool的 AC |
+| risk-analyzer | `/risk-analyzer` | 分析 PR / branch 的開發風險，可結合 ClickUp 票卡的 AC |
 | gen-test-cases | `/gen-test-cases` | 從 task 或需求描述產出手動測試案例 |
 
 ---
 
 ## 安裝
 
-```bash
-# 安裝為 Claude Code plugin
-claude plugin install https://github.com/your-username/qa-intel
-```
-
-或 clone 後手動安裝：
+clone 後以本機目錄載入：
 
 ```bash
-git clone https://github.com/your-username/qa-intel ~/.claude/plugins/qa-intel
+git clone https://github.com/shengwun0819/qa-intel
+claude --plugin-dir ./qa-intel
 ```
+
+> `claude plugin install` 只接受 `<plugin>@<marketplace>`，不接受 repo URL。本 repo 目前沒有 `marketplace.json`，因此尚不能用該指令安裝（規劃中）。
 
 ---
 
@@ -103,7 +104,7 @@ git clone https://github.com/your-username/qa-intel ~/.claude/plugins/qa-intel
 ```
 /gen-test-cases（Task ID）
 → 產出完整 Verification phase 測試案例
-→ 自動寫入 Scrum Tool（ClickUp / Jira）
+→ 確認後寫成 ClickUp Doc 並在 Task 留言（目前僅支援 ClickUp，也可只輸出本機 Markdown）
 ```
 
 ---
@@ -114,13 +115,13 @@ git clone https://github.com/your-username/qa-intel ~/.claude/plugins/qa-intel
 |------|------|--------|
 | Claude Code CLI | 執行所有 skill | 必要 |
 | `gh` CLI（已登入） | `risk-analyzer` 讀取 private PR diff | PR 分析時需要 |
-| Scrum Tool API Token | gen-test-cases 讀寫 Scrum Tool | 依 `pm_tool` 設定 |
+| ClickUp MCP（或 `CLICKUP_TOKEN` / `CLICKUP_WORKSPACE_ID`） | gen-test-cases、risk-analyzer 讀取票卡；gen-test-cases 寫回 | 使用 ClickUp 票卡時需要；直接描述需求則不需要 |
 
 ---
 
 ## 知識庫說明
 
-`knowledge/repos/` 下每個 `.md` 檔案代表一個 repo 的知識快照，包含：
+`~/.qa-intel/knowledge/repos/`（可用環境變數 `QA_INTEL_HOME` 改變根目錄）下每個 `.md` 檔案代表一個 repo 的知識快照，包含：
 
 - Repo 概覽與定位、技術棧
 - 目錄結構與各目錄職責
@@ -128,8 +129,8 @@ git clone https://github.com/your-username/qa-intel ~/.claude/plugins/qa-intel
 - 測試結構與覆蓋狀況
 - **已知風險模組**（影響 risk-analyzer 分析重點）
 
-知識庫是時間快照，不上傳至 git（由 `.gitignore` 排除）。  
-repo 有重大架構調整時執行 `/repo-scout` 更新。
+知識庫是時間快照，存放在 plugin 目錄之外，因此不會進入本 repo 的 git，plugin 更新也不會覆蓋。  
+repo 有重大架構調整時執行 `/repo-scout` 更新；舊版若把知識庫放在別處，請手動搬到上述路徑。
 
 ---
 
@@ -148,5 +149,21 @@ repo 有重大架構調整時執行 `/repo-scout` 更新。
 
 - Phase 1：輸入自動化（自動偵測當前 branch PR、從 branch 名稱萃取 Task ID）
 - Phase 2：risk-analyzer → gen-test-cases 直接銜接（風險報告自動轉為測試重點）
-- Phase 3：更多 Scrum Tool支援（Jira、Linear）
+- Phase 3：更多 Scrum Tool 支援（Jira、Linear）；目前只實作 ClickUp
 - Phase 4：Integration / E2E Test 自動產出
+- 可攜性：專案配置（`project.md`：PM 工具、輸出語言、裝置/範圍預設、自訂模板）與每家公司獨立的知識庫目錄，目前尚未實作
+- 發佈：提供 `marketplace.json`，讓 `claude plugin install` 可直接安裝
+
+細節見 [`skills/gen-test-cases/FUTURE.md`](skills/gen-test-cases/FUTURE.md)。
+
+---
+
+## 開發
+
+本 repo 只有 Markdown prompt，沒有 build 或單元測試。修改後執行：
+
+```bash
+python3 -I scripts/validate.py
+```
+
+檢查 frontmatter、agent 檔案位置、知識庫路徑一致性、步驟編號重複等；CI 會執行同一支腳本。開發指引見 [CLAUDE.md](CLAUDE.md)。
