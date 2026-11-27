@@ -1,6 +1,6 @@
 ---
 name: gen-test-cases
-description: 從 ClickUp 票卡（Jira、Linear 尚未支援）或需求描述，分析功能並產出結構化手動測試案例清單，支援 Development phase（開發中，輕量）與 Verification phase（測試/驗收，完整）兩種模式。輸出為 Markdown 或回寫至 ClickUp。當使用者說「幫我產生測試案例」、「列出測試項目」、「這個功能怎麼測」、「分析測試點」、「gen test cases」、「建立測試計畫」，或提供 Task ID 並要求建立測試計畫時觸發。尚未適用於撰寫測試程式碼。
+description: 從 ClickUp 票卡（Jira、Linear 尚未支援）或需求描述，分析功能並產出結構化手動測試案例清單，支援 Development phase（開發中，輕量）與 Verification phase（測試/驗收，完整）兩種模式。輸出為 Markdown 或回寫至 ClickUp。當使用者說「幫我產生測試案例」、「列出測試項目」、「這個功能怎麼測」、「分析測試點」、「gen test cases」、「建立測試計畫」，或提供 Task ID 並要求建立測試計畫時觸發。尚未適用於撰寫測試程式碼。若環境中同時有其他同名的 gen-test-cases skill（例如 swiss-knife:gen-test-cases），僅在使用者明確提到 qa-intel、要搭配 repo 知識庫，或以 /qa-intel:gen-test-cases 呼叫時使用本 skill。
 ---
 
 # gen-test-cases

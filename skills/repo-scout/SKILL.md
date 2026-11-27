@@ -1,6 +1,6 @@
 ---
 name: repo-scout
-description: 掃描指定 repository，萃取結構化知識並寫入 ~/.qa-intel/knowledge/repos/<name>.md，供 risk-analyzer、gen-test-cases 等 skill 使用。支援單一與批次掃描。當使用者說「幫我掃描這個 repo」、「建立 repo 知識庫」、「讓你了解這個專案」、「repo-scout」時觸發。
+description: 掃描指定 repository，萃取結構化知識並寫入 ~/.qa-intel/knowledge/repos/<name>.md，供 risk-analyzer、gen-test-cases 等 skill 使用。支援單一與批次掃描。當使用者說「幫我掃描這個 repo」、「建立 repo 知識庫」、「讓你了解這個專案」、「repo-scout」時觸發。若環境中有其他同類的 repo 掃描 skill，僅在使用者提到 qa-intel 或要求寫入 qa-intel 知識庫時使用本 skill。
 ---
 
 # repo-scout
@@ -199,8 +199,8 @@ keywords: [<掃描用的 keywords，若 Focused 模式>]
    > ✓ 知識庫已建立：`~/.qa-intel/knowledge/repos/<repo-name>.md`
    >
    > 現在可以使用：
-   > - `/risk-analyzer` — 分析 PR 或 branch 的開發風險
-   > - `/gen-test-cases` — 產出測試案例時自動讀取此知識庫補充背景
+   > - `/qa-intel:risk-analyzer` — 分析 PR 或 branch 的開發風險
+   > - `/qa-intel:gen-test-cases` — 產出測試案例時自動讀取此知識庫補充背景
 
 ---
 
@@ -216,8 +216,8 @@ keywords: [<掃描用的 keywords，若 Focused 模式>]
 > | b_project | Quick | ✓ 已建立 |
 >
 > 可執行：
-> - `/risk-analyzer` — 分析 PR 風險（會自動選取對應 repo 的知識庫）
-> - `/gen-test-cases` — 產出測試案例（自動補充 codebase 背景）
+> - `/qa-intel:risk-analyzer` — 分析 PR 風險（會自動選取對應 repo 的知識庫）
+> - `/qa-intel:gen-test-cases` — 產出測試案例（自動補充 codebase 背景）
 
 ---
 
