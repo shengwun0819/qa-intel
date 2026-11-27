@@ -38,14 +38,27 @@ qa-intel/
 
 ## 安裝
 
-clone 後以本機目錄載入：
+本 repo 同時是一個 plugin marketplace（`.claude-plugin/marketplace.json`），可一行安裝：
+
+```bash
+claude plugin install qa-intel --marketplace shengwun0819/qa-intel
+```
+
+或分兩步：
+
+```bash
+claude plugin marketplace add shengwun0819/qa-intel
+claude plugin install qa-intel@qa-intel
+```
+
+只想本機試用（不安裝）：
 
 ```bash
 git clone https://github.com/shengwun0819/qa-intel
 claude --plugin-dir ./qa-intel
 ```
 
-> `claude plugin install` 只接受 `<plugin>@<marketplace>`，不接受 repo URL。本 repo 目前沒有 `marketplace.json`，因此尚不能用該指令安裝（規劃中）。
+> `claude plugin install` 不接受單純的 repo URL，需透過 marketplace 或 `--plugin-dir`。marketplace 安裝讀取的是 repo 預設分支上的內容。
 
 ---
 
@@ -152,7 +165,6 @@ repo 有重大架構調整時執行 `/repo-scout` 更新；舊版若把知識庫
 - Phase 3：更多 Scrum Tool 支援（Jira、Linear）；目前只實作 ClickUp
 - Phase 4：Integration / E2E Test 自動產出
 - 可攜性：專案配置（`project.md`：PM 工具、輸出語言、裝置/範圍預設、自訂模板）與每家公司獨立的知識庫目錄，目前尚未實作
-- 發佈：提供 `marketplace.json`，讓 `claude plugin install` 可直接安裝
 
 細節見 [`skills/gen-test-cases/FUTURE.md`](skills/gen-test-cases/FUTURE.md)。
 

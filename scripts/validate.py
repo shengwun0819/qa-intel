@@ -31,6 +31,20 @@ try:
 except (OSError, ValueError) as e:
     fail(f"plugin.json invalid: {e}")
 
+# marketplace.json: lists exactly this plugin, with a source that exists
+try:
+    plugin_name = json.loads((ROOT / ".claude-plugin" / "plugin.json").read_text(encoding="utf-8"))["name"]
+    market = json.loads((ROOT / ".claude-plugin" / "marketplace.json").read_text(encoding="utf-8"))
+    entries = {p.get("name"): p for p in market.get("plugins", [])}
+    if plugin_name not in entries:
+        fail(f"marketplace.json: no plugin entry named '{plugin_name}' (as in plugin.json)")
+    else:
+        src = entries[plugin_name].get("source")
+        if not isinstance(src, str) or not (ROOT / src).resolve().joinpath(".claude-plugin", "plugin.json").exists():
+            fail(f"marketplace.json: source {src!r} does not point at a plugin directory")
+except (OSError, ValueError, KeyError) as e:
+    fail(f"marketplace.json invalid: {e}")
+
 # skills: <skill>/SKILL.md with name + description, name matches directory
 skill_files = sorted((ROOT / "skills").glob("*/SKILL.md"))
 for f in skill_files:

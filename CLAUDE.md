@@ -13,7 +13,10 @@ It is a personal, portable QA toolkit meant to move between companies, so skills
 ```bash
 python3 -I scripts/validate.py        # the only automated check; CI (.github/workflows/validate.yml) runs the same
 claude --plugin-dir "$(pwd)"          # load this working copy as a plugin to try a skill by hand
+claude plugin validate .              # official manifest check (plugin.json + marketplace.json)
 ```
+
+The repo is its own single-plugin marketplace (`.claude-plugin/marketplace.json`, `source: "./"`); keep its plugin `name` equal to the one in `plugin.json`. The `CLAUDE.md` warning from `claude plugin validate` is expected: this file is developer guidance for the repo, not context shipped with the plugin.
 
 There is no way to run a skill automatically. Verify skill changes by reading them end to end and, when possible, trying them with `--plugin-dir`.
 
