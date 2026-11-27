@@ -40,6 +40,7 @@ The skills share state through one file per repo, not through code:
 - Each skill is `skills/<name>/SKILL.md` with `name` (equal to the directory name) and `description` in frontmatter.
 - Agents are flat files `agents/<name>.md` with `name`, `description` and a `tools:` field (not `(Tools: …)` inside the description).
 - Step headings inside a `SKILL.md` (`### 2b.`, `### 3d-補.` …) must be unique; other text refers to steps by these ids, so renumbering means updating those references.
+- User-facing docs and skill text write commands with the plugin prefix (`/qa-intel:gen-test-cases`), because the user also has `swiss-knife:gen-test-cases` installed and bare names can hit the wrong skill. Skill `description`s say when to defer to a same-named skill from another plugin.
 - Forbidden strings: `self_project`, `{qa-intel-root}`, `~/qa-intel/`, `gen-test-cases Phase 0`.
 
 ## Documentation vs. reality

@@ -388,13 +388,13 @@
         <span class="step-num">STEP 04 <span class="optional-badge">選用</span></span>
         <div class="step-title">建立知識庫</div>
         <div class="step-body">掃描 repo，讓 risk-analyzer 與 gen-test-cases 有 codebase 背景知識。知識庫寫入 ~/.qa-intel/knowledge/repos/。</div>
-        <div class="step-cmd">/repo-scout</div>
+        <div class="step-cmd">/qa-intel:repo-scout</div>
       </div>
       <div class="setup-step" style="background:var(--surf-hi)">
         <span class="step-num" style="color:var(--scout)">READY</span>
         <div class="step-title">開始使用</div>
         <div class="step-body">執行任意 skill。目前以通用模式運作，專案配置自動載入尚在規劃中。</div>
-        <div class="step-cmd">/gen-test-cases</div>
+        <div class="step-cmd">/qa-intel:gen-test-cases</div>
       </div>
     </div>
   </section>
@@ -426,7 +426,7 @@
           </div>
           <div>
             <div class="row-label">指令</div>
-            <code class="cmd">/gen-test-cases</code>
+            <code class="cmd">/qa-intel:gen-test-cases</code>
           </div>
           <div class="get-text">
             讀取 Task 的 title、description、AC、留言。若有知識庫則自動補充 codebase 背景。產出測試案例，經你確認後寫成 ClickUp Doc 並在 Task 留言。
@@ -451,7 +451,7 @@
           </div>
           <div>
             <div class="row-label">指令</div>
-            <code class="cmd">/gen-test-cases → 補充 local path + keywords</code>
+            <code class="cmd">/qa-intel:gen-test-cases → 補充 local path + keywords</code>
           </div>
           <div class="get-text">
             除 AC 外，還會根據關鍵字定向讀取原始碼，補充票卡未明確說明的系統行為與邊界條件。
@@ -475,7 +475,7 @@
           </div>
           <div>
             <div class="row-label">指令</div>
-            <code class="cmd">/gen-test-cases → 補充 PR URL</code>
+            <code class="cmd">/qa-intel:gen-test-cases → 補充 PR URL</code>
           </div>
           <div class="get-text">
             讀取 PR diff，精確定位本次改動的檔案與模組。測試案例聚焦於 <strong>實際有變更的範圍</strong>，減少不必要的案例。
@@ -500,7 +500,7 @@
           </div>
           <div>
             <div class="row-label">指令</div>
-            <code class="cmd">/gen-test-cases → 補充 branch URL</code>
+            <code class="cmd">/qa-intel:gen-test-cases → 補充 branch URL</code>
           </div>
           <div class="get-text">
             從 ai-plans 讀取 Scope In/Out、Done criteria、RD 測試策略。<strong>不測項目直接對應排除</strong>，Done criteria 轉為 Happy Path 通過條件。
@@ -524,7 +524,7 @@
           </div>
           <div>
             <div class="row-label">指令</div>
-            <code class="cmd">/gen-test-cases → 貼入 Slack 內容</code>
+            <code class="cmd">/qa-intel:gen-test-cases → 貼入 Slack 內容</code>
           </div>
           <div class="get-text">
             從非正式討論中萃取需求決策、被明確排除的情境、具體範例資料。特別適合 <strong>AC 寫得不夠完整</strong>但 Slack 有補充說明的情況。
@@ -547,7 +547,7 @@
           </div>
           <div>
             <div class="row-label">指令</div>
-            <code class="cmd">/gen-test-cases → 貼上需求 → 提供輸出路徑</code>
+            <code class="cmd">/qa-intel:gen-test-cases → 貼上需求 → 提供輸出路徑</code>
           </div>
           <div class="get-text">
             不需要 ClickUp 帳號。輸出為本機 Markdown 檔案。適合快速生成、個人筆記、或公司不用 ClickUp 的情境。
@@ -570,7 +570,7 @@
           </div>
           <div>
             <div class="row-label">指令</div>
-            <code class="cmd">/gen-test-cases</code>
+            <code class="cmd">/qa-intel:gen-test-cases</code>
           </div>
           <div class="get-text">
             Phase 2f 自動偵測情境，套用整合類模板（條列式，含迴歸驗證區塊）。（自訂模板與觸發關鍵字為規劃中功能，尚未實作。）
@@ -597,7 +597,7 @@
           </div>
           <div>
             <div class="row-label">指令</div>
-            <code class="cmd">/gen-test-cases → 提供所有來源</code>
+            <code class="cmd">/qa-intel:gen-test-cases → 提供所有來源</code>
           </div>
           <div class="get-text">
             同時取得 AC（Task）、變更範圍（PR diff）、設計意圖（ai-plans）、codebase 背景（知識庫）。產出的測試策略摘要會標注各資訊來源。
@@ -663,7 +663,7 @@
           </div>
           <div>
             <div class="row-label">指令</div>
-            <code class="cmd">/risk-analyzer → 貼入 PR URL</code>
+            <code class="cmd">/qa-intel:risk-analyzer → 貼入 PR URL</code>
           </div>
           <div class="get-text">
             用 WebFetch 讀取 PR diff，分析 8 個風險維度。無需任何帳號設定。適合 Open Source PR review。
@@ -687,7 +687,7 @@
           </div>
           <div>
             <div class="row-label">指令</div>
-            <code class="cmd">/risk-analyzer → PR URL + local path</code>
+            <code class="cmd">/qa-intel:risk-analyzer → PR URL + local path</code>
           </div>
           <div class="get-text">
             改用 <code style="font-family:var(--font-mono);font-size:0.72rem;color:var(--code-text)">gh pr diff</code> 讀取完整 diff。需要 <code style="font-family:var(--font-mono);font-size:0.72rem;color:var(--code-text)">gh</code> CLI 已登入。
@@ -711,7 +711,7 @@
           </div>
           <div>
             <div class="row-label">指令</div>
-            <code class="cmd">/risk-analyzer → feat/xxx + local path</code>
+            <code class="cmd">/qa-intel:risk-analyzer → feat/xxx + local path</code>
           </div>
           <div class="get-text">
             執行 <code style="font-family:var(--font-mono);font-size:0.72rem;color:var(--code-text)">git diff main...branch</code> 分析。開發中即可提早評估風險，不用等 PR。
@@ -735,7 +735,7 @@
           </div>
           <div>
             <div class="row-label">指令</div>
-            <code class="cmd">/risk-analyzer → PR + Task ID</code>
+            <code class="cmd">/qa-intel:risk-analyzer → PR + Task ID</code>
           </div>
           <div class="get-text">
             除 8 維度風險外，額外輸出 <strong>AC 覆蓋分析</strong>：哪條 AC 找不到對應實作、diff 有哪些不在 AC 裡的改動。
@@ -759,10 +759,10 @@
           </div>
           <div>
             <div class="row-label">指令</div>
-            <code class="cmd">/risk-analyzer → 選擇繼續</code>
+            <code class="cmd">/qa-intel:risk-analyzer → 選擇繼續</code>
           </div>
           <div class="get-text">
-            仍可執行，但無法對照「已知風險模組」做深度分析。Skill 會提示先執行 <code style="font-family:var(--font-mono);font-size:0.72rem;color:var(--code-text)">/repo-scout</code>，詢問是否仍繼續。
+            仍可執行，但無法對照「已知風險模組」做深度分析。Skill 會提示先執行 <code style="font-family:var(--font-mono);font-size:0.72rem;color:var(--code-text)">/qa-intel:repo-scout</code>，詢問是否仍繼續。
           </div>
         </div>
       </div>
@@ -782,7 +782,7 @@
           </div>
           <div>
             <div class="row-label">指令</div>
-            <code class="cmd">/risk-analyzer → 直接貼上 diff</code>
+            <code class="cmd">/qa-intel:risk-analyzer → 直接貼上 diff</code>
           </div>
           <div class="get-text">
             最靈活的入口，不需要 GitHub 帳號或 local repo。適合 code review 時快速臨時分析。
@@ -801,7 +801,7 @@
         <div style="font-size:0.75rem; color:var(--text-2); padding:6px 10px; background:var(--bg); border-radius:3px; border:1px solid var(--border-lo);">範圍外改動標記</div>
         <div style="font-size:0.75rem; color:var(--text-2); padding:6px 10px; background:var(--bg); border-radius:3px; border:1px solid var(--border-lo);">建議測試重點清單</div>
         <div style="font-size:0.75rem; color:var(--text-2); padding:6px 10px; background:var(--bg); border-radius:3px; border:1px solid var(--border-lo);">部署前 checklist</div>
-        <div style="font-size:0.75rem; color:var(--text-2); padding:6px 10px; background:var(--bg); border-radius:3px; border:1px solid var(--border-lo);">銜接 /gen-test-cases 的提示</div>
+        <div style="font-size:0.75rem; color:var(--text-2); padding:6px 10px; background:var(--bg); border-radius:3px; border:1px solid var(--border-lo);">銜接 /qa-intel:gen-test-cases 的提示</div>
       </div>
     </div>
   </section>
@@ -833,7 +833,7 @@
           </div>
           <div>
             <div class="row-label">指令</div>
-            <code class="cmd">/repo-scout → path → comprehensive</code>
+            <code class="cmd">/qa-intel:repo-scout → path → comprehensive</code>
           </div>
           <div class="get-text">
             掃描根目錄 + 核心 source 目錄，建立完整知識快照：架構、模組、API 清單、已知風險點。Token：<strong>20k–80k</strong>。
@@ -857,7 +857,7 @@
           </div>
           <div>
             <div class="row-label">指令</div>
-            <code class="cmd">/repo-scout → path → quick</code>
+            <code class="cmd">/qa-intel:repo-scout → path → quick</code>
           </div>
           <div class="get-text">
             只讀 README + package manager 檔案。快速了解 tech stack 與整體架構，不深入模組細節。Token：<strong>3k–8k</strong>。
@@ -881,7 +881,7 @@
           </div>
           <div>
             <div class="row-label">指令</div>
-            <code class="cmd">/repo-scout → path → focused → keywords</code>
+            <code class="cmd">/qa-intel:repo-scout → path → focused → keywords</code>
           </div>
           <div class="get-text">
             只深入掃描與關鍵字相關的目錄與檔案。適合需要了解特定模組（例如「auth」、「payment」）時使用。Token：<strong>5k–15k</strong>。
@@ -904,7 +904,7 @@
           </div>
           <div>
             <div class="row-label">指令</div>
-            <code class="cmd">/repo-scout → GitHub URL</code>
+            <code class="cmd">/qa-intel:repo-scout → GitHub URL</code>
           </div>
           <div class="get-text">
             用 WebFetch 讀取 GitHub 上的檔案，不需要 clone。適合第三方 library 或 Open Source 專案分析。
@@ -929,7 +929,7 @@
           </div>
           <div>
             <div class="row-label">指令</div>
-            <code class="cmd">/repo-scout → 同 repo path → 覆蓋更新</code>
+            <code class="cmd">/qa-intel:repo-scout → 同 repo path → 覆蓋更新</code>
           </div>
           <div class="get-text">
             重新掃描，更新 `~/.qa-intel/knowledge/repos/&lt;repo&gt;.md`。知識庫會標注更新時間戳。日常小 PR 不需要更新，大架構調整後執行。
@@ -952,7 +952,7 @@
           </div>
           <div>
             <div class="row-label">指令</div>
-            <code class="cmd">/repo-scout（一次列出多個 repo 批次掃描）</code>
+            <code class="cmd">/qa-intel:repo-scout（一次列出多個 repo 批次掃描）</code>
           </div>
           <div class="get-text">
             每個 repo 產出一份獨立的 `.md` 知識檔案。risk-analyzer 一次分析一個 repo，依 repo 名稱讀取對應的知識檔案；同時跨 repo 分析尚未支援。

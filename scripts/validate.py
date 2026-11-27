@@ -94,11 +94,20 @@ for f in skill_files:
             seen[m.group(1)] = True
 
 # every skill referenced in README / USAGE exists
+skill_names = {f.parent.name for f in skill_files}
 for doc in ("README.md", "USAGE.md"):
     text = (ROOT / doc).read_text(encoding="utf-8")
-    for ref in re.findall(r"`/([a-z-]+)`", text):
-        if ref not in {f.parent.name for f in skill_files}:
+    for ref in re.findall(r"`/(?:qa-intel:)?([a-z-]+)`", text):
+        if ref not in skill_names:
             fail(f"{doc}: references /{ref} but skills/{ref}/SKILL.md does not exist")
+
+# commands must be written with the plugin prefix (/qa-intel:<skill>) so they never
+# collide with same-named skills from other plugins (e.g. swiss-knife:gen-test-cases)
+bare = re.compile(r"(?<![\w.:/-])/(" + "|".join(sorted(skill_names)) + r")\b")
+for doc in ["README.md", "USAGE.md", "knowledge/README.md", "docs/scenarios.html"] \
+        + [str(f.relative_to(ROOT)) for f in skill_files]:
+    for m in bare.finditer((ROOT / doc).read_text(encoding="utf-8")):
+        fail(f"{doc}: bare command '/{m.group(1)}' - use '/qa-intel:{m.group(1)}'")
 
 if errors:
     print("\n".join(f"FAIL: {e}" for e in errors))

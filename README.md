@@ -2,7 +2,7 @@
 
 個人 QA 智慧工具集——以 AI agent 驅動的測試案例產出、風險評估與 codebase 知識管理。
 
-設計為**可攜式個人工具**：帶著走，每家公司用 `/repo-scout` 建立知識庫，核心方法論不變。
+設計為**可攜式個人工具**：帶著走，每家公司用 `/qa-intel:repo-scout` 建立知識庫，核心方法論不變。
 
 → 第一次使用？先看 [USAGE.md](USAGE.md)（一頁最小用法），完整情境見 [docs/scenarios.html](docs/scenarios.html)。
 
@@ -31,9 +31,11 @@ qa-intel/
 
 | Skill | 指令 | 說明 |
 |-------|------|------|
-| repo-scout | `/repo-scout` | 掃描 repo，建立結構化知識庫快照 |
-| risk-analyzer | `/risk-analyzer` | 分析 PR / branch 的開發風險，可結合 ClickUp 票卡的 AC |
-| gen-test-cases | `/gen-test-cases` | 從 task 或需求描述產出手動測試案例 |
+| repo-scout | `/qa-intel:repo-scout` | 掃描 repo，建立結構化知識庫快照 |
+| risk-analyzer | `/qa-intel:risk-analyzer` | 分析 PR / branch 的開發風險，可結合 ClickUp 票卡的 AC |
+| gen-test-cases | `/qa-intel:gen-test-cases` | 從 task 或需求描述產出手動測試案例 |
+
+指令名稱帶 plugin 前綴（`/qa-intel:<skill>`）。若同時安裝其他同名 skill（例如 `swiss-knife:gen-test-cases`），請一律使用帶前綴的寫法，以免呼叫到別的 skill。
 
 ---
 
@@ -68,7 +70,7 @@ claude --plugin-dir ./qa-intel
 ### Step 1：讓 qa-intel 了解你的 repo
 
 ```
-/repo-scout
+/qa-intel:repo-scout
 > repo 路徑：/path/to/your/repo
 > 模式：comprehensive（初次建議）
 ```
@@ -78,7 +80,7 @@ claude --plugin-dir ./qa-intel
 ### Step 2：分析開發風險（merge 前）
 
 ```
-/risk-analyzer
+/qa-intel:risk-analyzer
 > PR URL 或 branch：feat/your-feature
 > Task ID：abc123（選填，有則分析 AC 覆蓋缺口）
 ```
@@ -86,7 +88,7 @@ claude --plugin-dir ./qa-intel
 ### Step 3：產出測試案例
 
 ```
-/gen-test-cases
+/qa-intel:gen-test-cases
 > Task ID 或直接描述需求
 > 測試階段：Development 或 Verification
 ```
@@ -97,26 +99,26 @@ claude --plugin-dir ./qa-intel
 
 ### Sprint 開始
 ```
-/repo-scout（建立或更新知識庫）
+/qa-intel:repo-scout（建立或更新知識庫）
 ```
 
 ### Feature 開發中（RD）
 ```
-/risk-analyzer（branch + Task）
+/qa-intel:risk-analyzer（branch + Task）
 → 確認實作方向是否符合 AC
 → 提早發現遺漏的邊界條件
 ```
 
 ### PR Review 前（QA）
 ```
-/risk-analyzer（PR URL + Task）
+/qa-intel:risk-analyzer（PR URL + Task）
 → 確認 AC 全部有對應實作
 → 識別需要重點測試的高風險模組
 ```
 
 ### 測試準備（QA）
 ```
-/gen-test-cases（Task ID）
+/qa-intel:gen-test-cases（Task ID）
 → 產出完整 Verification phase 測試案例
 → 確認後寫成 ClickUp Doc 並在 Task 留言（目前僅支援 ClickUp，也可只輸出本機 Markdown）
 ```
@@ -144,7 +146,7 @@ claude --plugin-dir ./qa-intel
 - **已知風險模組**（影響 risk-analyzer 分析重點）
 
 知識庫是時間快照，存放在 plugin 目錄之外，因此不會進入本 repo 的 git，plugin 更新也不會覆蓋。  
-repo 有重大架構調整時執行 `/repo-scout` 更新；舊版若把知識庫放在別處，請手動搬到上述路徑。
+repo 有重大架構調整時執行 `/qa-intel:repo-scout` 更新；舊版若把知識庫放在別處，請手動搬到上述路徑。
 
 ---
 
@@ -152,10 +154,10 @@ repo 有重大架構調整時執行 `/repo-scout` 更新；舊版若把知識庫
 
 | 操作 | 預估 token |
 |------|-----------|
-| `/repo-scout` Comprehensive（中型 repo） | 20k – 80k |
-| `/repo-scout` Quick | 3k – 8k |
-| `/risk-analyzer`（有知識庫 + PR + Task） | 10k – 30k |
-| `/gen-test-cases` Verification phase | 8k – 20k |
+| `/qa-intel:repo-scout` Comprehensive（中型 repo） | 20k – 80k |
+| `/qa-intel:repo-scout` Quick | 3k – 8k |
+| `/qa-intel:risk-analyzer`（有知識庫 + PR + Task） | 10k – 30k |
+| `/qa-intel:gen-test-cases` Verification phase | 8k – 20k |
 
 ---
 

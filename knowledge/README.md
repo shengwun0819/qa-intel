@@ -18,7 +18,7 @@ qa-intel 所有 skill 共用的結構化知識儲存區。
 ```
 ~/.qa-intel/knowledge/
 └── repos/
-    ├── <repo-name>.md    # 由 /repo-scout 建立，每個 repo 一個檔案
+    ├── <repo-name>.md    # 由 /qa-intel:repo-scout 建立，每個 repo 一個檔案
     └── ...
 ```
 
@@ -44,18 +44,18 @@ qa-intel 所有 skill 共用的結構化知識儲存區。
 
 ## 如何建立 / 更新知識
 
-執行 `/repo-scout`，提供 repo 路徑或 GitHub URL。
+執行 `/qa-intel:repo-scout`，提供 repo 路徑或 GitHub URL。
 
 ## 哪些 skill 會讀取知識庫
 
 | Skill | 讀取方式 |
 |-------|---------|
-| `/risk-analyzer` | 讀取對應 repo 知識，輔助風險判斷 |
-| `/gen-test-cases` | 讀取對應 repo 知識，補充測試背景 |
+| `/qa-intel:risk-analyzer` | 讀取對應 repo 知識，輔助風險判斷 |
+| `/qa-intel:gen-test-cases` | 讀取對應 repo 知識，補充測試背景 |
 
 ---
 
 ## 知識時效性
 
-知識庫是掃描當下的快照。若 repo 有重大變更（架構調整、新模組），建議重新執行 `/repo-scout` 更新。
+知識庫是掃描當下的快照。若 repo 有重大變更（架構調整、新模組），建議重新執行 `/qa-intel:repo-scout` 更新。
 `last-scanned` 欄位記錄上次掃描日期，可作為判斷是否需要更新的依據。
