@@ -93,11 +93,12 @@ for f in skill_files:
                 fail(f"{f.relative_to(ROOT)}: duplicate heading id '{m.group(1)}'")
             seen[m.group(1)] = True
 
-# every skill referenced in README exists
-readme = (ROOT / "README.md").read_text(encoding="utf-8")
-for ref in re.findall(r"`/([a-z-]+)`", readme):
-    if ref not in {f.parent.name for f in skill_files}:
-        fail(f"README.md: references /{ref} but skills/{ref}/SKILL.md does not exist")
+# every skill referenced in README / USAGE exists
+for doc in ("README.md", "USAGE.md"):
+    text = (ROOT / doc).read_text(encoding="utf-8")
+    for ref in re.findall(r"`/([a-z-]+)`", text):
+        if ref not in {f.parent.name for f in skill_files}:
+            fail(f"{doc}: references /{ref} but skills/{ref}/SKILL.md does not exist")
 
 if errors:
     print("\n".join(f"FAIL: {e}" for e in errors))

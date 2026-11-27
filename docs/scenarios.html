@@ -378,9 +378,7 @@
       <div class="setup-step">
         <span class="step-num">STEP 02 <span class="optional-badge">選用</span></span>
         <div class="step-title">建立專案配置（規劃中，尚未實作）</div>
-        <div class="step-body">未來版本：複製範例專案為你公司的配置目錄。目前 repo 內沒有 projects/ 目錄。</div>
-        <div class="step-cmd">cp -r projects/TestProject projects/MyCompany</div>
-      </div>
+        <div class="step-body">未來版本：複製範例專案為你公司的配置目錄。目前 repo 內沒有 projects/ 目錄。</div>      </div>
       <div class="setup-step">
         <span class="step-num">STEP 03 <span class="optional-badge">選用</span></span>
         <div class="step-title">填入 project.md（規劃中，尚未實作）</div>
@@ -816,7 +814,7 @@
       <span class="skill-pill pill-scout">REPO-SCOUT</span>
       <h2 class="section-title">建立 Codebase 知識庫</h2>
     </div>
-    <p class="section-sub">知識庫是快照，存放在 ~/.qa-intel/ 而非 plugin 目錄，換公司或 repo 有大改動時重新執行。gen-test-cases 與 risk-analyzer 都會在背景自動讀取。</p>
+    <p class="section-sub">知識庫是快照，存放在 ~/.qa-intel/ 而非 plugin 目錄，換公司或 repo 有大改動時重新執行。gen-test-cases 會自動（靜默）讀取；risk-analyzer 讀取，找不到時會先詢問是否仍要繼續。</p>
 
     <div class="scenario-grid">
 
@@ -934,7 +932,7 @@
             <code class="cmd">/repo-scout → 同 repo path → 覆蓋更新</code>
           </div>
           <div class="get-text">
-            重新掃描，更新 `knowledge/repos/<repo>.md`。知識庫會標注更新時間戳。日常小 PR 不需要更新，大架構調整後執行。
+            重新掃描，更新 `~/.qa-intel/knowledge/repos/&lt;repo&gt;.md`。知識庫會標注更新時間戳。日常小 PR 不需要更新，大架構調整後執行。
           </div>
         </div>
       </div>

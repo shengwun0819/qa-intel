@@ -4,7 +4,7 @@
 
 設計為**可攜式個人工具**：帶著走，每家公司用 `/repo-scout` 建立知識庫，核心方法論不變。
 
-→ 第一次使用？查看 [docs/scenarios.html](docs/scenarios.html) 了解所有使用情境。
+→ 第一次使用？先看 [USAGE.md](USAGE.md)（一頁最小用法），完整情境見 [docs/scenarios.html](docs/scenarios.html)。
 
 ---
 
@@ -19,6 +19,7 @@ qa-intel/
 ├── agents/
 │   └── repo-reader.md    # Sub-agent：codebase 深度閱讀（repo-scout 可委派）
 ├── knowledge/            # 知識庫格式說明（實際資料在 ~/.qa-intel/knowledge/repos/，不在本 repo）
+├── USAGE.md              # 一頁最小用法
 ├── docs/scenarios.html   # 使用情境完整說明
 ├── scripts/validate.py   # 結構與一致性檢查（CI 也會執行）
 └── CLAUDE.md             # 給 Claude Code 的開發指引

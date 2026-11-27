@@ -44,4 +44,4 @@ The skills share state through one file per repo, not through code:
 
 ## Documentation vs. reality
 
-`docs/scenarios.html` and `README.md` describe behaviour for users. Features that are only planned (`projects/<company>/project.md`, custom templates, bug-record regression cases, Jira/Linear, automatic input detection) must be labelled as planned — do not describe them as working. Never commit real knowledge-base files or company-specific material; `knowledge/` here holds documentation only.
+`docs/scenarios.html`, `README.md` and `USAGE.md` describe behaviour for users. Keep `USAGE.md` to one page of minimal usage that links to the other two, so there are not three copies of the details to keep in sync. Features that are only planned (`projects/<company>/project.md`, custom templates, bug-record regression cases, Jira/Linear, automatic input detection) must be labelled as planned — do not describe them as working. Never commit real knowledge-base files or company-specific material; `knowledge/` here holds documentation only.
